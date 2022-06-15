@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 
-export const isFalsy = (value: any) => (value === 0 ? false : !value);
+export const isFalsy = (value: unknown): boolean =>
+  value === 0 ? false : !value;
 export const cleanObject = (obj: object) => {
   const result = { ...obj };
   Object.keys(result).forEach((key) => {
@@ -15,7 +16,7 @@ export const cleanObject = (obj: object) => {
   return result;
 };
 
-export const useDebounce = (value: any, delay = 300) => {
+export const useDebounce = <V>(value: V, delay = 300) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedValue(value), delay);
