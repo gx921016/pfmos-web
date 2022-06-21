@@ -8,6 +8,7 @@ import Logo from "./assets/logo_a.png";
 import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "./screens/project";
+import { resetRoute } from "./utils";
 
 const AuthenticatedApp = () => {
   // const { logout, user } = useAuth();
@@ -37,7 +38,10 @@ const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <Image preview={false} style={{ height: "25rem" }} src={Logo} />
+        <Button type={"link"} style={{ height: "6.5rem" }} onClick={resetRoute}>
+          <Image preview={false} style={{ height: "6.5rem" }} src={Logo} />
+        </Button>
+
         <h3>项目</h3>
         <h3>用户</h3>
       </HeaderLeft>
