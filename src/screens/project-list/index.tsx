@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { List } from "./list";
 import { SearchPanel } from "./search-panel";
 import "../../utils/";
-import { cleanObject, useDebounce, useMount } from "../../utils";
-import { localStorageKey } from "../../auth-provider";
-import { useHttp } from "../../utils/http";
-
-const apiUrl = process.env.REACT_APP_API_URL;
+import { useDebounce, useDocumentTitle } from "../../utils";
+import styled from "@emotion/styled";
+import { Typography } from "antd";
+import { useProjects } from "../../utils/project";
+import { useUsers } from "../../utils/user";
 
 function ProjectListScreen() {
   const [param, setParam] = useState({
@@ -15,35 +15,28 @@ function ProjectListScreen() {
   });
   const debouncedParam = useDebounce(param, 500);
 
-  const [users, setUsers] = useState([]);
-  const [list, setList] = useState([]);
+  const { isLoading, error, data: list } = useProjects(debouncedParam);
+  const { data: users } = useUsers();
 
-  const client = useHttp();
-  //拿到项目列表
-  useEffect(() => {
-    client("project/v1/projects", { data: cleanObject(debouncedParam) }).then(
-      (res) => {
-        setList(res.data.records);
-      }
-    );
-  }, [debouncedParam]); // eslint-disable-line react-hooks/exhaustive-deps
+  useDocumentTitle("项目列表", false);
   //拿到用户列表
-  useMount(() => {
-    let token = window.localStorage.getItem(localStorageKey);
-    fetch(`${apiUrl}user/v1/users`, {
-      headers: {
-        "sa-token": token ? token.toString() : "",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setUsers(data.data));
-  });
+  // useMount(() => {
+  //   client("user/v1/users").then((res) => setUsers(res.data));
+  // });
   return (
-    <div>
-      <SearchPanel users={users} param={param} setParam={setParam} />
-      <List list={list} users={users} />
-    </div>
+    <Container>
+      <h1>项目列表</h1>
+      <SearchPanel users={users || []} param={param} setParam={setParam} />
+      {error ? (
+        <Typography.Text type={"danger"}>{error.message}</Typography.Text>
+      ) : null}
+      <List dataSource={list || []} loading={isLoading} users={users || []} />
+    </Container>
   );
 }
+
+const Container = styled.div`
+  padding: 3.2rem;
+`;
 
 export default ProjectListScreen;

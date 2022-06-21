@@ -31,6 +31,7 @@ export const http = async (
 
   async function logout() {
     // await auth.logout();
+    console.log("logout");
     window.localStorage.removeItem(localStorageKey);
     window.location.reload();
     return Promise.reject({ message: "请重新登录" });
@@ -44,7 +45,7 @@ export const http = async (
       } else if (data.code === 403) {
         return await logout();
       } else {
-        return Promise.reject(data);
+        return Promise.reject(data.msg);
       }
     }
     if (response.status === 403) {

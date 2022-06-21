@@ -27,7 +27,7 @@ export const login = (params: { username: string; password: string }) => {
         console.log(data.data);
         return handleUserResponse(data);
       } else {
-        return Promise.reject(data.msg);
+        return Promise.reject(new Error(data.msg));
       }
     });
 };

@@ -1,9 +1,13 @@
 import React, { FormEvent } from "react";
 import { register } from "../auth-provider";
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import { LongButton } from "./index";
 
-export const RegisterScreen = () => {
+export const RegisterScreen = ({
+  onErrors,
+}: {
+  onErrors: (error: Error) => void;
+}) => {
   // const { login, user } = useAuth();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -12,7 +16,11 @@ export const RegisterScreen = () => {
       .value;
     const password = (event.currentTarget.elements[1] as HTMLInputElement)
       .value;
-    register({ username, password });
+    try {
+      register({ username, password });
+    } catch (e) {
+      onErrors(e as Error);
+    }
   };
   return (
     <Form onFinish={handleSubmit}>
