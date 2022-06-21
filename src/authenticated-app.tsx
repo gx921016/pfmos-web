@@ -5,25 +5,46 @@ import styled from "@emotion/styled";
 import { Button, Dropdown, Image, Menu } from "antd";
 import { Row } from "./components/lib";
 import Logo from "./assets/logo_a.png";
+import { Navigate, Route, Routes } from "react-router";
+import { BrowserRouter as Router } from "react-router-dom";
+import { ProjectScreen } from "./screens/project";
+
 const AuthenticatedApp = () => {
   // const { logout, user } = useAuth();
   return (
     <Container>
-      <Header between={true}>
-        <HeaderLeft gap={true}>
-          <Image preview={false} style={{ height: "25rem" }} src={Logo} />
-          <h3>项目</h3>
-          <h3>用户</h3>
-        </HeaderLeft>
-        <HeaderRight>
-          <User />
-        </HeaderRight>
-      </Header>
-
-      <Main>
-        <ProjectListScreen />
-      </Main>
+      <PageHeader />
+      <Router>
+        <Main>
+          <Routes>
+            <Route path={"/projects"} element={<ProjectListScreen />} />
+            <Route
+              path={"/projects/:projectId/*"}
+              element={<ProjectScreen />}
+            />
+            <Route
+              path="*"
+              element={<Navigate to="/projects" replace={true} />}
+            />
+          </Routes>
+        </Main>
+      </Router>
     </Container>
+  );
+};
+
+const PageHeader = () => {
+  return (
+    <Header between={true}>
+      <HeaderLeft gap={true}>
+        <Image preview={false} style={{ height: "25rem" }} src={Logo} />
+        <h3>项目</h3>
+        <h3>用户</h3>
+      </HeaderLeft>
+      <HeaderRight>
+        <User />
+      </HeaderRight>
+    </Header>
   );
 };
 const User = () => {
