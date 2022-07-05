@@ -13,6 +13,7 @@ export const handleUserResponse = ({ data }: { data: User }) => {
 };
 
 export const login = (params: { username: string; password: string }) => {
+  console.log("调用了login");
   return fetch(`${apiUrl}user/v1/login`, {
     method: "POST",
     headers: {

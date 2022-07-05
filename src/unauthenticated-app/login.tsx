@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "../context/auth-context";
 import { Form, Input } from "antd";
 import { LongButton } from "./index";
+import { useAsync } from "../utils/use-async";
 
 export const LoginScreen = ({
   onErrors,
@@ -9,9 +10,10 @@ export const LoginScreen = ({
   onErrors: (error: Error) => void;
 }) => {
   const { login } = useAuth();
+  const { run, isLoading } = useAsync(undefined, { throwOnError: true });
 
   const handleSubmit = (values: { username: string; password: string }) => {
-    login(values).catch((err) => {
+    run(login(values)).catch((err) => {
       onErrors(err);
     });
   };
@@ -30,7 +32,7 @@ export const LoginScreen = ({
       >
         <Input placeholder={"密码"} type="password" id={"password"} />
       </Form.Item>
-      <LongButton htmlType={"submit"} type={"primary"}>
+      <LongButton loading={isLoading} htmlType={"submit"} type={"primary"}>
         登录
       </LongButton>
     </Form>

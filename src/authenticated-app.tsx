@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "./context/auth-context";
 import ProjectListScreen from "./screens/project-list";
 import styled from "@emotion/styled";
@@ -9,9 +9,12 @@ import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "./screens/project";
 import { resetRoute } from "./utils";
+import { ProjectModal } from "./screens/project-list/project-modal";
 
 const AuthenticatedApp = () => {
   // const { logout, user } = useAuth();
+
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <Container>
       <PageHeader />
@@ -29,6 +32,10 @@ const AuthenticatedApp = () => {
             />
           </Routes>
         </Main>
+        <ProjectModal
+          projectModalOpen={projectModalOpen}
+          onClose={() => setProjectModalOpen(false)}
+        />
       </Router>
     </Container>
   );

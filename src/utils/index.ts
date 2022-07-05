@@ -25,6 +25,7 @@ export const useDebounce = <V>(value: V, delay = 300) => {
 
 export const useMount = (callback: () => void) => {
   useEffect(() => {
+    console.log("useMount-useEffect");
     callback();
   }, []);
 };
